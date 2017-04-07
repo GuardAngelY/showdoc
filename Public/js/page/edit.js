@@ -188,7 +188,10 @@ $(function() {
 $("#beautify-json-dialog .editormd-enter-btn").click(function(){
   var data = $("#beautify-json-dialog .jsons").val();
       try{
-          var text="\n ``` \n \{ \n"+dump(JSON.parse(data))+" \} \n\n ```\n\n";//整体加个大括号
+          data = data.replace(/(^\s*)|(\s*$)/g,"");
+          op1 = data.substr(0, 1) == "[" ? "[":"{";
+          op2 = (op1 == "[") ? "]":"}";
+          var text="\n ``` \n "+op1+" \n"+dump(JSON.parse(data))+" "+op2+" \n\n ```\n\n";//整体加个大括号
           //$("#beautify-json-dialog .jsons").val(text);
           $("#beautify-json-dialog .jsons").val("");
           editormd.insertValue(text);
@@ -283,7 +286,7 @@ function dump(arr,level) {
 		$(".editormd-preview-container table thead tr").css({"background-color":"#08c","color":"#fff"});
     $(".editormd-preview-container table tr").eq(0).css({"background-color":"#08c","color":"#fff"});
 		$(".editormd-preview-container table tr").each(function(){
-			if($(this).find("td").eq(1).html()=="object")
+			if($(this).find("td").eq(1).html()=="object" || $(this).find("td").eq(1).html()=="array[object]")
 			{
 				$(this).css({"background-color":"#99CC99","color":"#000"});
 			}
